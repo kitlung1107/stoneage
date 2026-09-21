@@ -18,26 +18,10 @@ func _ready() -> void:
 	sun.rotation_degrees = Vector3(-55, -30, 0)
 	sun.light_energy = 0.8
 	add_child(sun)
-	var ground := StaticBody3D.new()
-	ground.name = "Ground"
-	var mesh := MeshInstance3D.new()
-	var plane := PlaneMesh.new()
-	plane.size = Vector2(120, 120)
-	mesh.mesh = plane
-	var material := ShaderMaterial.new()
-	material.shader = load("res://shaders/grass.gdshader")
-	mesh.material_override = material
-	ground.add_child(mesh)
-	var collider := CollisionShape3D.new()
-	var box := BoxShape3D.new()
-	box.size = Vector3(120, 1, 120)
-	collider.shape = box
-	collider.position.y = -0.5
-	ground.add_child(collider)
-	add_child(ground)
+	add_child(preload("res://scripts/landscape.gd").new())
 	var player := Player.new()
 	player.name = "Player"
-	player.position = Vector3(0, 0.2, 6)
+	player.position = Vector3(-12, 0.2, 6)
 	add_child(player)
 	player.camera.rotation_degrees.x = -12
 	var canvas := CanvasLayer.new()
@@ -47,3 +31,4 @@ func _ready() -> void:
 	controls.name = "Controls"
 	controls.player = player
 	canvas.add_child(controls)
+

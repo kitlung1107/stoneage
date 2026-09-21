@@ -43,6 +43,14 @@ func run() -> void:
 		await physics_frame
 	check(player.is_on_floor(), "Player must land on grass")
 	check(absf(player.position.y) < 0.05, "Feet must rest on ground")
+	player.hand.set_process(false)
+	for i in range(30):
+		player.hand.advance_bob(1.0 / 60.0, 4.0)
+	check(player.hand.bob_offset.length() > 0.1, "Walking must animate hand")
+	for i in range(120):
+		player.hand.advance_bob(1.0 / 60.0, 0.0)
+	check(player.hand.bob_offset.length() < 0.01, "Stopped hand must settle")
+	player.hand.set_process(true)
 	var right := Vector2(controls.size.x * 0.75, 250)
 	touch(controls, 4, true, Vector2(100, 250))
 	touch(controls, 9, true, right)
@@ -72,3 +80,4 @@ func run() -> void:
 	check(player.position.x <= 58, "Player must remain on ground boundary")
 	print("PHASE_ONE_TESTS: ", "PASS" if failures == 0 else "FAIL", " (", failures, " failures)")
 	quit(failures)
+

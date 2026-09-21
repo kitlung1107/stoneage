@@ -8,7 +8,6 @@ var knob := Vector2.ZERO
 var radius := 65.0
 var touch_active := false
 var hint: Label
-
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -78,3 +77,4 @@ func _draw() -> void:
 		draw_circle(base, radius, Color(0.06, 0.15, 0.08, 0.25))
 		draw_arc(base, radius, 0, TAU, 48, Color(1, 1, 1, 0.5), 2, true)
 		draw_circle(knob if move_id != -1 else base, 24, Color(1, 1, 1, 0.45))
+

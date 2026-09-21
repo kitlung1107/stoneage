@@ -5,7 +5,7 @@ const LOOK_LIMIT := deg_to_rad(80.0)
 var move_input := Vector2.ZERO
 var camera: Camera3D
 var hand: Node3D
-
+var walking_speed := 0.0
 func _ready() -> void:
 	camera = Camera3D.new()
 	camera.position.y = 1.6
@@ -28,6 +28,7 @@ func look(delta: Vector2) -> void:
 	camera.rotation.x = clampf(camera.rotation.x - delta.y, -LOOK_LIMIT, LOOK_LIMIT)
 
 func _physics_process(delta: float) -> void:
+	var previous_position := position
 	var keys := Vector2.ZERO
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		keys = Vector2(float(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT)) - float(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT)), float(Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN)) - float(Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP)))
@@ -43,6 +44,9 @@ func _physics_process(delta: float) -> void:
 	# Keep the learner on the finite grassland without invisible scenery.
 	position.x = clampf(position.x, -58.0, 58.0)
 	position.z = clampf(position.z, -58.0, 58.0)
+	var displacement := position - previous_position
+	walking_speed = Vector2(displacement.x, displacement.z).length() / maxf(delta, 0.0001) if is_on_floor() else 0.0
 	if position.y < -10:
 		position = Vector3(0, 0.2, 0)
 		velocity = Vector3.ZERO
+

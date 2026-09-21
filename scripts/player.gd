@@ -4,6 +4,7 @@ const SPEED := 4.0
 const LOOK_LIMIT := deg_to_rad(80.0)
 var move_input := Vector2.ZERO
 var camera: Camera3D
+var hand: Node3D
 
 func _ready() -> void:
 	camera = Camera3D.new()
@@ -12,6 +13,8 @@ func _ready() -> void:
 	camera.far = 180.0
 	add_child(camera)
 	camera.current = true
+	hand = preload("res://scripts/first_person_hand.gd").new()
+	camera.add_child(hand)
 	var shape := CapsuleShape3D.new()
 	shape.radius = 0.3
 	shape.height = 1.8

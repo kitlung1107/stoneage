@@ -30,6 +30,15 @@ func run() -> void:
 	await process_frame
 	var player = scene.get_node("Player")
 	var controls = scene.get_node("Interface/Controls")
+	check(player.hand.hand_rect.mouse_filter == Control.MOUSE_FILTER_IGNORE, "Hand overlay must not intercept touch input")
+	var sample := Node3D.new()
+	var packed := PackedScene.new()
+	packed.pack(sample)
+	sample.free()
+	player.hand.set_held_visual(packed)
+	check(player.hand.held_visual.get_parent() == player.hand.item_socket, "Held visual must attach to grip")
+	player.hand.set_held_visual(null)
+	check(player.hand.held_visual == null and player.hand.item_socket.get_child_count() == 0, "Clearing must return to empty hand")
 	for i in range(60):
 		await physics_frame
 	check(player.is_on_floor(), "Player must land on grass")
